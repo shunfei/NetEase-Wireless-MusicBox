@@ -59,9 +59,11 @@ option = {
 player = play.Play(option)
 
 define("port", default=80, help="run on the given port", type=int)
-define("db", default='MusicBox', help="database name", type=str)
-define("user", default='root', help="database user", type=str)
-define("pwd", default='xiaocao', help="database password", type=str) 
+define("db", default="MusicBox", help="database name", type=str)
+define("db_host", default='localhost', help="database host", type=str)
+define("db_port", default=27017, help="database port", type=int)
+define("db_user", default='root', help="database user", type=str)
+define("db_pwd", default='xiaocao', help="database password", type=str) 
 
 NetEase = api.NetEase()
 login = NetEase.login('username', 'password')
@@ -257,6 +259,13 @@ def base_url(path):
 
 def main():
     tornado.options.parse_command_line()
+
+    global player
+    option['db'] = options['db']
+    option['host'] = options['db_host']
+    option['port'] = options['db_port']
+    player = play.Play(option)
+    
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
