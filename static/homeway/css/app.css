@@ -43,8 +43,8 @@ i.tabbar-demo-icon-4 {
   border-radius: 50%;
 }
 
-.color-green { background: green; }
-.color-red { background: #D00202; }
+#start-play { background: green; }
+#pause-play { background: #D00202; }
 .left { float: left; }
 .right { float: right; }
 .margin-left {

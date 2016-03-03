@@ -136,7 +136,7 @@ class Play(MusicData):
 	def play_music(self, sid):
 		self.need_to_next = False
 		if self.play_status != STOP:
-			if int(self.music_info['sid']) == int(sid) or str(sid) == '':
+			if str(self.music_info['sid']) == str(sid) or str(sid) == '':
 				self.need_to_play = True
 				return
 		item = threading.Thread( target=self.play_music_thread, args=( sid,), name="player" )
@@ -185,6 +185,7 @@ class Play(MusicData):
 
 		self.move_to_played_list(sid)
 		m = self.get_play_list_next()
+		self.currentMusic = None
 		if m:
 			print 'Play next music from play-list:', m['name']
 			self.play_music(m['sid'])
