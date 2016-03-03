@@ -135,9 +135,10 @@ class Play(MusicData):
 	# play music
 	def play_music(self, sid):
 		self.need_to_next = False
-		if self.play_status != STOP or self.music_info['sid'] == sid:
-			self.need_to_play = True
-			return
+		if self.play_status != STOP:
+			if int(self.music_info['sid']) == int(sid) or str(sid) == '':
+				self.need_to_play = True
+				return
 		item = threading.Thread( target=self.play_music_thread, args=( sid,), name="player" )
 		threads.append( item )
 		item.start()
@@ -160,6 +161,7 @@ class Play(MusicData):
 			print("File {} error! {}".format(self.music_info['path'], pygame.get_error()))
 			return
 		pygame.mixer.music.play()
+		print u'开始播放', self.music_info['name']
 		# 设置当前播放的音乐
 		self.currentMusic = self.get_music_from_play_list(sid)
 		while pygame.mixer.music.get_busy():
@@ -167,6 +169,7 @@ class Play(MusicData):
 			if self.need_to_next:
 				pygame.mixer.music.stop()
 				self.need_to_next = False
+				print u'开始播放下一首'
 			if self.need_to_pause:
 				pygame.mixer.music.pause()
 				self.need_to_pause = False
@@ -183,7 +186,7 @@ class Play(MusicData):
 		self.move_to_played_list(sid)
 		m = self.get_play_list_next()
 		if m:
-			print('Play next music from play-list:', m['name'])
+			print 'Play next music from play-list:', m['name']
 			self.play_music(m['sid'])
 
 	# search by api and get info
