@@ -11,6 +11,10 @@ import shutil
 import wget,threading,time,os,api
 threads = []
 
+STOP = 0
+PLAYING = 1
+PAUSE = 2
+
 class MusicData(object):
 	def set_music_info(self, info):
 		return self.db.save(info)
@@ -65,8 +69,9 @@ class Play(MusicData):
 	def __init__ (self, option):
 		self.currentMusic = None
 		self.db_option = option
-		self.is_playing = False
+		self.play_status = STOP
 		self.need_to_pause = False # 暂停播放
+		self.need_to_play = False # 继续播放
 		self.music_option = {
 			'frequence' : 44100,
 			'bitsize' : -16,
@@ -94,7 +99,7 @@ class Play(MusicData):
 			if m:
 				self.currentMusic = m
 		if not self.currentMusic:
-			return {}
+			return None
 		return self.currentMusic
 
 	# order music
@@ -119,10 +124,13 @@ class Play(MusicData):
 
 	# play music
 	def play_music(self, sid):
+		if self.play_status == PLAYING and self.music_info['sid'] == sid:
+			self.need_to_play = True
+			return
 		item = threading.Thread( target=self.play_music_thread, args=( sid,), name="player" )
 		threads.append( item )
 		item.start()
-		self.is_playing = True
+		self.play_status == PLAYING
 
 	# play threading
 	def play_music_thread(self,sid):
@@ -145,6 +153,18 @@ class Play(MusicData):
 		self.currentMusic = self.get_music_from_play_list(sid)
 		while pygame.mixer.music.get_busy():
 			clock.tick(30)
+			if self.need_to_pause:
+				pygame.mixer.music.pause()
+				self.need_to_pause = False
+				self.play_status = PAUSE
+				wait_to_play = True
+				while wait_to_play:
+					clock.tick(30)
+					if self.need_to_play:
+						pygame.mixer.music.play()
+						self.need_to_play = False
+						self.play_status = PLAYING
+
 		self.move_to_played_list(sid)
 		m = self.get_play_list_next()
 		if m:

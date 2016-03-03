@@ -85,6 +85,7 @@ class Application(tornado.web.Application):
             (r"/ajaxLogin", AjaxLoginHandler),
             (r"/ajaxOrderMusic", AjaxOrderMusicHandler),
             (r"/ajaxPlayMusic", AjaxPlayMusicHandler),
+            (r"/ajaxPauseMusic", AjaxPauseMusicHandler),
             (r"/ajaxPlayNextMusic", AjaxPlayNextMusicHandler),
             (r"/ajaxNewAlbums", AjaxNewAlbumsHandler),
             (r"/ajaxHotSong", AjaxHotSongHandler),
@@ -168,7 +169,7 @@ class AjaxSearchHandler(tornado.web.RequestHandler):
         res = NetEase.search(  req['key'] )
         self.write( tornado.escape.json_encode(res['result']) )
 
-# 播放音乐
+# 点播音乐
 class AjaxOrderMusicHandler(tornado.web.RequestHandler):
     def initialize(self):
         '''database init'''
@@ -228,6 +229,19 @@ class AjaxPlayNextMusicHandler(tornado.web.RequestHandler):
         self.write( tornado.escape.json_encode( res ) )
 
 
+# 继续播放音乐
+class AjaxPauseMusicHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        '''database init'''
+        self.sid = self.get_secure_cookie("sid")
+    def get(self):
+        self.write( tornado.escape.json_encode( {'result': False, 'info': '拒绝GET请求！！' } ) )
+    def post(self):
+        self.set_header("Accept-Charset", "utf-8")
+        res = {'result': True, 'info': ''}
+        if player.play_status == play.PLAYING:
+            player.need_to_pause = True
+        self.write( tornado.escape.json_encode( res ) )
 
 # 登录网易云
 class AjaxLoginHandler(tornado.web.RequestHandler):

@@ -8,21 +8,34 @@
             </div><a href="#" class="searchbar-cancel">取 消</a>
         </form>
         <div class="list-block">
+        {% if data['current'] %}
             <center><img class="album-pic logo" src="{{ data['current']['album_pic'] }}" /></center>
 
-            <ul id="list-album">
+            <ul>
                 <li>
                     <div class="">
                         <div class="item-content">
                             <div class="item-inner"> 
                                 <div class="item-title glyphicon glyphicon-bookmark">
-                                    <a href="#" id="start-play" class="button button-fill color-green">开始播放</a>
-                                    <a href="#" id="pause-play" class="button button-fill color-red">暂停播放</a>
+                                    <a href="#" id="start-play" class="button button-fill color-green left">开始播放</a>
+                                    <a href="#" id="pause-play" class="button button-fill color-red left margin-left">暂停播放</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </li>
+                <li>
+                    <div class="">
+                        <div class="item-content">
+                            <div class="item-inner"> 
+                                <div class="item-title glyphicon glyphicon-bookmark">
+                                    <input class="set-volume" type="range" min="0" max="1" value="1" step="0.1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                
                 <li>
                     <div class="">
                         <div class="item-content">
@@ -63,10 +76,12 @@
                     </div>
                 </li>
             </ul>
-
+        {% else %}
+            <h2>请先去搜索添加歌曲</h2>
+        {% end %}
         </div>
 
-        <h2>已点歌曲列表</h2>
+        <h2>已点歌曲列表（<a href="javascript:" id="reload-play-list">刷新本页面</a>）</h2>
             <div class="list-block">
                 <ul id="play-list">
                     <li>

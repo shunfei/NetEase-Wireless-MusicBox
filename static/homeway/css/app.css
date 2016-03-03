@@ -42,3 +42,16 @@ i.tabbar-demo-icon-4 {
   height: 200px;
   border-radius: 50%;
 }
+
+.left { float: left; }
+.right { float: right; }
+.margin-left {
+  margin-left: 20px;
+}
+
+#key {
+  width: 50%;
+  height: 30px;
+  font-size: 20px;
+  border-color: green;
+}

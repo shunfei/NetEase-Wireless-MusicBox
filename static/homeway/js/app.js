@@ -31,11 +31,15 @@ $(document).ready(function(){
 	// myApp.modal({title: '点歌台小助手'});
 	//console.log(view2);
 	
-	$('#search').click( function (e){
+	$('#search').click( searchSong );
+	$("#search-form").submit( searchSong );
+	function searchSong(e){
 		var data = {
 			'key': $('#key').val(),
 		}
+		myApp.showPreloader();
 		$.post('/ajaxSearch', data, function (res){
+			myApp.hidePreloader();
 			if(res){
 				var result = res['songs'];
 				var html ='<li><div class="item-content"><div class="item-inner"><div class="item-title">歌曲</div><div class="item-after">歌手</div></div></div></li>';
@@ -48,7 +52,8 @@ $(document).ready(function(){
 
 			}
 		},'json');
-	});
+		event.preventDefault();
+	}
 
 	var load_new_albums = function(){
 		$.ajax({
@@ -98,6 +103,12 @@ $(document).ready(function(){
 		load_new_albums();
 		load_hot_song();
 	});
+
+	// 重新加载播放列表
+	$(document).on('click', '#reload-play-list', function (e){
+		mainView.router.refreshPage()
+	});
+
 
 	// 播放
 	$(document).on('click', '#player', function (e){
