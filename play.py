@@ -124,13 +124,13 @@ class Play(MusicData):
 
 	# play music
 	def play_music(self, sid):
-		if self.play_status == PLAYING and self.music_info['sid'] == sid:
+		if self.play_status != STOP and self.music_info['sid'] == sid:
 			self.need_to_play = True
 			return
 		item = threading.Thread( target=self.play_music_thread, args=( sid,), name="player" )
 		threads.append( item )
 		item.start()
-		self.play_status == PLAYING
+		self.play_status = PLAYING
 
 	# play threading
 	def play_music_thread(self,sid):

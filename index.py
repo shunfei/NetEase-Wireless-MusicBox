@@ -229,7 +229,7 @@ class AjaxPlayNextMusicHandler(tornado.web.RequestHandler):
         self.write( tornado.escape.json_encode( res ) )
 
 
-# 继续播放音乐
+# 暂停播放音乐
 class AjaxPauseMusicHandler(tornado.web.RequestHandler):
     def initialize(self):
         '''database init'''
@@ -241,6 +241,7 @@ class AjaxPauseMusicHandler(tornado.web.RequestHandler):
         res = {'result': True, 'info': ''}
         if player.play_status == play.PLAYING:
             player.need_to_pause = True
+            print u'暂停播放音乐'
         self.write( tornado.escape.json_encode( res ) )
 
 # 登录网易云
