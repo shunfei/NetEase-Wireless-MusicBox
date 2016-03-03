@@ -143,6 +143,7 @@ class Play(MusicData):
 		threads.append( item )
 		item.start()
 		self.play_status = PLAYING
+		self.need_to_play = False
 
 	# play threading
 	def play_music_thread(self,sid):
@@ -189,6 +190,8 @@ class Play(MusicData):
 		if m:
 			print 'Play next music from play-list:', m['name']
 			self.play_music(m['sid'])
+		else:
+			self.play_status = STOP
 
 	# search by api and get info
 	def search_music_info(self, sid):
