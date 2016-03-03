@@ -22,10 +22,51 @@ class MusicData(object):
 		else:
 			return False
 
+	def get_play_list_next(self):
+		res = self._db.play_list.find_one()
+		if res:
+			return self.cover_music_data(res)
+		else:
+			return False
+
+	def get_music_from_play_list(self, sid):
+		res = self._db.play_list.find_one({ 'sid': sid })
+		if res:
+			return self.cover_music_data(res)
+		else:
+			return False
+
+	def del_music_from_play_list(self, sid):
+		return self._db.play_list.remove({ 'sid': sid })
+
+
+	def add_to_play_list(self, info):
+		return self._db.play_list.save(info)
+
+	def add_to_played_list(self, info):
+		return self._db.played_list.save(info)
+	
+	def get_play_list(self, page, pagesize):
+		musics = self._db.play_list.find().skip((page-1)*pagesize).limit(pagesize)
+		res = []
+		for music in musics:
+			res.append( self.cover_music_data(music) )
+		return res
+
+	def cover_music_data(self, music):
+		music['_id'] = str(music['_id'])
+		music['duration'] = int(music['duration'])
+		return music
+
+	def get_played_list(self, page, pagesize):
+		pass
+
 class Play(MusicData):
 	def __init__ (self, option):
+		self.currentMusic = None
 		self.db_option = option
 		self.is_playing = False
+		self.need_to_pause = False # 暂停播放
 		self.music_option = {
 			'frequence' : 44100,
 			'bitsize' : -16,
@@ -42,16 +83,46 @@ class Play(MusicData):
 		# connect to mongodb
 		self._conn = pymongo.MongoClient( option['host'], option['port'] )
 		self._db = self._conn[ option['db'] ]
-		self.db = self._db[ option['db'] ].music
+		self.db = self._db.music
 		# setting pygame
 		pygame.mixer.init( self.music_option['frequence'], self.music_option['bitsize'], self.music_option['channels'], self.music_option['buffer'])
 		pygame.mixer.music.set_volume(1)
 	
+	def current_playing_music(self):
+		if not self.currentMusic:
+			m = self.get_play_list_next()
+			if m:
+				self.currentMusic = m
+		if not self.currentMusic:
+			return {}
+		return self.currentMusic
+
+	# order music
+	def order_music(self, music_info):
+		res = {
+			'success': False,
+			'error': '',
+		}
+		m = self.get_music_from_play_list(music_info['sid'])
+		if m:
+			res['error'] = u'歌曲 [' + music_info['name'] + u'] 已经在点播列表中'
+			return res
+		MusicData.add_to_play_list(self, music_info)
+		res['success'] = True
+		return res
+
+	def move_to_played_list(self, sid):
+		m = self.get_music_from_play_list(sid)
+		if m:
+			self.add_to_played_list(m)
+		return self.del_music_from_play_list(sid)
+
 	# play music
 	def play_music(self, sid):
 		item = threading.Thread( target=self.play_music_thread, args=( sid,), name="player" )
 		threads.append( item )
 		item.start()
+		self.is_playing = True
 
 	# play threading
 	def play_music_thread(self,sid):
@@ -70,9 +141,16 @@ class Play(MusicData):
 			print("File {} error! {}".format(self.music_info['path'], pygame.get_error()))
 			return
 		pygame.mixer.music.play()
+		# 设置当前播放的音乐
+		self.currentMusic = self.get_music_from_play_list(sid)
 		while pygame.mixer.music.get_busy():
 			clock.tick(30)
-		pass
+		self.move_to_played_list(sid)
+		m = self.get_play_list_next()
+		if m:
+			print('Play next music from play-list:', m['name'])
+			self.play_music(m['sid'])
+
 	# search by api and get info
 	def search_music_info(self, sid):
 		NetEase = api.NetEase()

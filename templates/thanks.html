@@ -12,10 +12,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <!-- CSS Library -->
-    <link rel="stylesheet" href="../static/framework/css/framework7.ios.css">
+    <link rel="stylesheet" href="../static/framework/css/framework7.css">
     <!-- Custom app styles-->
     <link rel="stylesheet" href="../static/homeway/css/app.css">
-    <!-- <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="statusbar-overlay"></div>
@@ -34,28 +34,34 @@
     </div>
 
     <div class="views tabs toolbar-through">
+        <div id="view-1" class="view view-main tab active">
+        <!-- Pages-->
+            <div class="pages">
+                <!-- Page, data-page contains page name-->
+                <div data-page="index-1" class="page">
+                    <div class="page-content">
+                        <div class="content-block-title"><h2>感谢</h2></div>
+                        <div class="content-block">
+                            <h5>感谢你使用homeway的无线音箱</h5>
+                            <h5>本产品用于懒人不下床，而在床上控制床下音箱所制</h5>
+                            <hr><br>
 
+                            <h4>关于：</h4>
+                            <h5>1、基于网易云音乐api</h5>
+                            <h5>2、树莓派端以Tornado为服务器</h5>
+                            <h5>3、手机Web为客户端</h5>
+                            <h5>4、手机与树莓派必须在一个网段内</h5>
+                            <hr><br>
 
-        <div id="main-music" class="view tab active">
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="left"><a href="#" class="back link album_panel"> <i class="icon icon-back"></i><span>Back</span></a></div>
-                    <div class="center sliding">播放列表</div>
-                </div>
-            </div>
-
-            <div class="pages navbar-through">
-                <div class="page" data-page="main-page">
-                  <div class="page-content">
-                    <p> <h2><a href="play-list.html"> 播放列表 </a></h2> </p>
-                  </div>
+                            <h4>联系：</h4>
+                            <h5>详情请关注：<a href="http://homeway.me" target="_blank">http://homeway.me</a></h5>
+                            <h5>Email: <a href="mailto:xiaocao.grasses@gmail.com">xiaocao.grasses@gmail.com</a></h5>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-
-
-
+      
         <!-- Second view (for second wrap)-->
         <div id="view-2" class="view tab">
             <!-- We can make with view with navigation, let's add Top Navbar-->
@@ -73,12 +79,8 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-addon">搜索</div>
-                                        <div class="item-input">
-            <input type="text" id="key" name="key" placeholder="单曲/歌手/专辑/歌单/用户">
-            <a id="search" href="#" class="button color-green">搜索</a>
-          </div>
-                                  
-   
+                                        <input type="text" class="form-control" id="key" name="key" placeholder="单曲/歌手/专辑/歌单/用户">  
+                                        <div id="search" class="input-group-addon glyphicon glyphicon-search"></div>  
                                     </div>
                                 </div>
                             </form>
@@ -115,29 +117,14 @@
         </div>
 
         <div id="view-3" class="view tab">
-            <!-- Pages-->
             <div class="pages">
-                <!-- Page, data-page contains page name-->
-                <div data-page="index-1" class="page">
+                <div data-page="index-3" class="page">
                     <div class="page-content">
-                        <div class="content-block-title"><h2>感谢</h2></div>
-                        <div class="content-block">
-                            <h5>感谢你使用homeway的无线音箱</h5>
-                            <h5>本产品用于懒人不下床，而在床上控制床下音箱所制</h5>
-                            <hr><br>
-
-                            <h4>关于：</h4>
-                            <h5>1、基于网易云音乐api</h5>
-                            <h5>2、树莓派端以Tornado为服务器</h5>
-                            <h5>3、手机Web为客户端</h5>
-                            <h5>4、手机与树莓派必须在一个网段内</h5>
-                            <hr><br>
-
-                            <h4>联系：</h4>
-                            <h5>详情请关注：<a href="http://homeway.me" target="_blank">http://homeway.me</a></h5>
-                            <h5>Email: <a href="mailto:xiaocao.grasses@gmail.com">xiaocao.grasses@gmail.com</a></h5>
+                        <div class="content-block-title">播放</div>
+                            <div class="content-block">
+                                
+                            </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -272,7 +259,7 @@
       </div>
       <!-- Bottom Tabbar-->
       <div class="toolbar tabbar tabbar-labels">
-        <div class="toolbar-inner"><a href="#main-music" class="tab-link active"> <i class="icon tabbar-demo-icon-1"></i><span class="tabbar-label">音乐</span></a><a id="menu-tab-search" href="#view-2" class="tab-link"><i class="icon tabbar-demo-icon-2"></i><span class="tabbar-label">搜索</span></a><a id="menu-player" href="#view-3" class="tab-link"> <i class="icon tabbar-demo-icon-3"><span class="badge bg-red">4</span></i><span class="tabbar-label">感谢</span></a><a href="#view-4" class="tab-link"> <i class="icon tabbar-demo-icon-4"></i><span class="tabbar-label">Photos</span></a></div>
+        <div class="toolbar-inner"><a href="#view-1" class="tab-link active"> <i class="icon tabbar-demo-icon-1"></i><span class="tabbar-label">感谢</span></a><a id="menu-tab-search" href="#view-2" class="tab-link"><i class="icon tabbar-demo-icon-2"></i><span class="tabbar-label">搜索</span></a><a id="menu-player" href="#view-3" class="tab-link"> <i class="icon tabbar-demo-icon-3"><span class="badge bg-red">4</span></i><span class="tabbar-label">音乐</span></a><a href="#view-4" class="tab-link"> <i class="icon tabbar-demo-icon-4"></i><span class="tabbar-label">Photos</span></a></div>
       </div>
     </div>
 

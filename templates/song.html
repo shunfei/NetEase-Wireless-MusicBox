@@ -9,14 +9,22 @@
         <div class="page-content song">
                 <br><br>
                 <!-- header -->
-                <center class="header"><img class="logo" src="{{ data[0]['album']['picUrl'] }}"></center>
+                <center class="header"><img class="logo album-pic" src="{{ data[0]['album']['picUrl'] }}"></center>
                 <!-- song info -->
                 <div class="body list-block">
-                
-                    <center data-id="{{ data[0]['id'] }}" data-url="{{ data[0]['mp3Url'] }}"> 
+                    
+                    <center data-all="{{ json_encode(data[0]) }}" 
+                    data-id="{{ data[0]['id'] }}" 
+                    data-name="{{ data[0]['name'] }}"
+                    data-url="{{ data[0]['mp3Url'] }}"
+                    data-duration="{{ data[0]['duration'] }}"
+                    data-artists="{{ data[0]['artists'][0]['name'] }}"
+                    data-album-pic="{{ data[0]['album']['picUrl'] }}"
+                    data-album-name="{{ data[0]['album']['name'] }}"
+                    > 
                         <a href="#" class="btn btn-success glyphicon glyphicon-play-circle player" id="player"> 播放 </a>
-                        <a href="#" class="btn btn-success glyphicon glyphicon-plus"> 收藏 </a>
-                        <a href="#" class="btn btn-success glyphicon glyphicon-share"> 分享 </a>
+                        <a href="#" class="btn btn-success glyphicon glyphicon-plus addorder" id="addorder" > 点播 </a>
+                        <!-- <a href="#" class="btn btn-success glyphicon glyphicon-share"> 分享 </a> -->
                     </center>
                     <br>
 

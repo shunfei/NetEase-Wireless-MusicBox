@@ -1,2 +1,3 @@
 music
 *.pyc
+.DS_Store

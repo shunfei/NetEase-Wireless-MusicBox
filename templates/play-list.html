@@ -1,0 +1,98 @@
+
+<div class="pages ">
+    <div data-page="play-list" class="page">
+    <div class="page-content">
+        <form data-search-list=".list-block-search" data-search-in=".item-title" class="searchbar searchbar-init">
+            <div class="searchbar-input">
+              <input type="search" id="searchkey" name="searchkey" placeholder="单曲/歌手/专辑/歌单/用户"><a href="#" class="searchbar-clear"></a>
+            </div><a href="#" class="searchbar-cancel">取 消</a>
+        </form>
+        <div class="list-block">
+            <center><img class="album-pic logo" src="{{ data['current']['album_pic'] }}" /></center>
+
+            <ul id="list-album">
+                <li>
+                    <div class="">
+                        <div class="item-content">
+                            <div class="item-inner"> 
+                                <div class="item-title glyphicon glyphicon-bookmark">
+                                    <a href="#" id="start-play" class="button button-fill color-green">开始播放</a>
+                                    <a href="#" id="pause-play" class="button button-fill color-red">暂停播放</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="">
+                        <div class="item-content">
+                            <div class="item-inner"> 
+                                <div class="item-title glyphicon glyphicon-bookmark"> 当前播放 ：{{ data['current']['name'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="">
+                        <div class="item-content">
+                            <div class="item-inner"> 
+                                <div class="item-title glyphicon glyphicon-time"> 曲长 ：{{ data['current']['duration']/60000 }}' 0''</div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="">
+                        <div class="item-content">
+                            <div class="item-inner"> 
+                                <div class="item-title glyphicon glyphicon-user"> 歌手 ：{{ data['current']['artists'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="">
+                        <div class="item-content">
+                            <div class="item-inner"> 
+                                <div class="item-title glyphicon glyphicon-list-alt"> 专辑 ：{{ data['current']['album_name'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+        <h2>已点歌曲列表</h2>
+            <div class="list-block">
+                <ul id="play-list">
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">歌曲</div>
+                                <div class="item-after">歌手</div>
+                            </div>
+                        </div>
+                    </li>
+                    {% for item in data['list'] %}
+                    <li>
+                        <a href="/song.html?sid={{ item['sid'] }}" class="item-link">
+                            <div class="item-content">
+                                <div class="item-inner"> 
+                                    <div class="item-title">{{ item['name'] }}</div>
+                                    <div class="item-after">{{ item['artists'] }}</div>
+                                </div>
+                            </div>
+                        </a>
+                   {% end %}
+                    </li>
+                </ul>
+            </div>
+    </div>
+    </div>
+</div>
+
+

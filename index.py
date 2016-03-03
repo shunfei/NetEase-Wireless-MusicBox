@@ -76,13 +76,16 @@ class Application(tornado.web.Application):
             (r"/", MainHandler),
             (r"/song.html", GetSongHandler),
             (r"/album.html", GetAlbumHandler),
+            (r"/play-list.html", GetPlayListHandler),
             
             #for ajax
             (r"/ajaxSearch", AjaxSearchHandler),
             (r"/ajaxGetSong", AjaxGetSongHandler),
             (r"/ajaxAlbum", AjaxGetAlbumHandler),
             (r"/ajaxLogin", AjaxLoginHandler),
+            (r"/ajaxOrderMusic", AjaxOrderMusicHandler),
             (r"/ajaxPlayMusic", AjaxPlayMusicHandler),
+            (r"/ajaxPlayNextMusic", AjaxPlayNextMusicHandler),
             (r"/ajaxNewAlbums", AjaxNewAlbumsHandler),
             (r"/ajaxHotSong", AjaxHotSongHandler),
             (r"/ajaxSetVolume", AjaxSetVolumeHandler),
@@ -113,6 +116,18 @@ class MainHandler(tornado.web.RequestHandler):
         NetEase.refresh()
         new_albums = NetEase.artists('4292')
         self.render("index.html", title="homeway|share", base_url=base_url, data=new_albums[0])
+
+class GetPlayListHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        pass
+    def get(self):
+        self.set_header("Accept-Charset", "utf-8")
+        res = {}
+        res['current'] = player.current_playing_music()
+        print res['current']
+        res['list'] = player.get_play_list(1, 500)
+        # self.write( tornado.escape.json_encode(res) )
+        self.render("play-list.html", title="homeway|share", data=res)
 
 class GetSongHandler(tornado.web.RequestHandler):
     def initialize(self):
@@ -152,6 +167,29 @@ class AjaxSearchHandler(tornado.web.RequestHandler):
         req = { 'key':self.get_argument("key") } 
         res = NetEase.search(  req['key'] )
         self.write( tornado.escape.json_encode(res['result']) )
+
+# 播放音乐
+class AjaxOrderMusicHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        '''database init'''
+        self.sid = self.get_secure_cookie("sid")
+    def get(self):
+        self.write( tornado.escape.json_encode( {'result': False, 'info': '拒绝GET请求！！' } ) )
+    def post(self):
+        self.set_header("Accept-Charset", "utf-8")
+        req = {
+            'sid':self.get_argument("sid"),
+            'url':self.get_argument("url"),
+            'name':self.get_argument("name"),
+            'duration':self.get_argument("duration"),
+            'artists':self.get_argument("artists"),
+            'album_pic':self.get_argument("album_pic"),
+            'album_name':self.get_argument("album_name"),
+        }
+        ok = player.order_music( req )
+        self.write( tornado.escape.json_encode( {'result': ok['success'], 'info': ok['error'] } ) )
+
+
 # 播放音乐
 class AjaxPlayMusicHandler(tornado.web.RequestHandler):
     def initialize(self):
@@ -164,8 +202,33 @@ class AjaxPlayMusicHandler(tornado.web.RequestHandler):
     def post(self):
         self.set_header("Accept-Charset", "utf-8")
         req = { 'sid':self.get_argument("sid"), 'url':self.get_argument("url"), } 
+        if req['sid'] == '':
+            m = player.get_play_list_next()
+            if m:
+                req['sid'] = m['sid']
         player.play_music( req['sid'] )
         self.write( tornado.escape.json_encode( {'result': True, 'info': 'play now...！！' } ) )
+
+# 播放下一首音乐
+class AjaxPlayNextMusicHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        '''database init'''
+        self.sid = self.get_secure_cookie("sid")
+    def get(self):
+        self.write( tornado.escape.json_encode( {'result': False, 'info': '拒绝GET请求！！' } ) )
+    def post(self):
+        self.set_header("Accept-Charset", "utf-8")
+        res = {'result': False, 'info': ''}
+        m = player.get_play_list_next()
+        if m:
+            player.play_music( m['sid'] )
+            res['result'] = True
+        else:
+            res['info'] = '没有可以播放的歌曲了'
+        self.write( tornado.escape.json_encode( res ) )
+
+
+
 # 登录网易云
 class AjaxLoginHandler(tornado.web.RequestHandler):
     def initialize(self):
