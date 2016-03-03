@@ -182,6 +182,15 @@ $(document).ready(function(){
         },'json');
 	});
 
+	// 下一首
+	$(document).on('click', '#play-next', function (e) {
+        $.post('/ajaxPlayNextMusic', {}, function (res){
+            if (!res.result) {
+            	myApp.alert('播放出错：' + res.info)
+            }
+        },'json');
+	});
+
 	// 调节音量
 	$(document).on('click', '.set-volume', function (e) {
 		var value = $(this).val();

@@ -219,13 +219,8 @@ class AjaxPlayNextMusicHandler(tornado.web.RequestHandler):
         self.write( tornado.escape.json_encode( {'result': False, 'info': '拒绝GET请求！！' } ) )
     def post(self):
         self.set_header("Accept-Charset", "utf-8")
-        res = {'result': False, 'info': ''}
-        m = player.get_play_list_next()
-        if m:
-            player.play_music( m['sid'] )
-            res['result'] = True
-        else:
-            res['info'] = '没有可以播放的歌曲了'
+        res = {'result': True, 'info': ''}
+        player.next_song( 5 )
         self.write( tornado.escape.json_encode( res ) )
 
 

@@ -72,6 +72,8 @@ class Play(MusicData):
 		self.play_status = STOP
 		self.need_to_pause = False # 暂停播放
 		self.need_to_play = False # 继续播放
+		self.need_to_next = False # 播放下一首
+		self.next_song_count = 0
 		self.music_option = {
 			'frequence' : 44100,
 			'bitsize' : -16,
@@ -116,6 +118,14 @@ class Play(MusicData):
 		res['success'] = True
 		return res
 
+	def next_song(self, count):
+		if self.next_song_count < count:
+			self.next_song_count += 1
+			return
+		print u'请求播放下一首的次数超过', count, u'次，将开始播放下一首'
+		self.next_song_count = 0
+		self.need_to_next = True
+
 	def move_to_played_list(self, sid):
 		m = self.get_music_from_play_list(sid)
 		if m:
@@ -124,6 +134,7 @@ class Play(MusicData):
 
 	# play music
 	def play_music(self, sid):
+		self.need_to_next = False
 		if self.play_status != STOP or self.music_info['sid'] == sid:
 			self.need_to_play = True
 			return
@@ -153,6 +164,9 @@ class Play(MusicData):
 		self.currentMusic = self.get_music_from_play_list(sid)
 		while pygame.mixer.music.get_busy():
 			clock.tick(30)
+			if self.need_to_next:
+				pygame.mixer.music.stop()
+				self.need_to_next = False
 			if self.need_to_pause:
 				pygame.mixer.music.pause()
 				self.need_to_pause = False
