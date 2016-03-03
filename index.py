@@ -125,7 +125,7 @@ class GetPlayListHandler(tornado.web.RequestHandler):
         self.set_header("Accept-Charset", "utf-8")
         res = {}
         res['current'] = player.current_playing_music()
-        print res['current']
+        # print res['current']
         res['list'] = player.get_play_list(1, 500)
         # self.write( tornado.escape.json_encode(res) )
         self.render("play-list.html", title="homeway|share", data=res)
