@@ -124,7 +124,7 @@ class Play(MusicData):
 
 	# play music
 	def play_music(self, sid):
-		if self.play_status != STOP and self.music_info['sid'] == sid:
+		if self.play_status != STOP or self.music_info['sid'] == sid:
 			self.need_to_play = True
 			return
 		item = threading.Thread( target=self.play_music_thread, args=( sid,), name="player" )
@@ -161,7 +161,8 @@ class Play(MusicData):
 				while wait_to_play:
 					clock.tick(30)
 					if self.need_to_play:
-						pygame.mixer.music.play()
+						wait_to_play = False
+						pygame.mixer.music.unpause()
 						self.need_to_play = False
 						self.play_status = PLAYING
 
