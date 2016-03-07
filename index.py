@@ -68,6 +68,8 @@ define("db_pwd", default='xiaocao', help="database password", type=str)
 NetEase = api.NetEase()
 login = NetEase.login('username', 'password')
 
+title = "点歌台"
+
 class Application(tornado.web.Application):
     '''setting || main || router'''
     def __init__(self):
@@ -116,7 +118,7 @@ class MainHandler(tornado.web.RequestHandler):
         self.set_header("Accept-Charset", "utf-8")
         NetEase.refresh()
         new_albums = NetEase.artists('4292')
-        self.render("index.html", title="homeway|share", base_url=base_url, data=new_albums[0])
+        self.render("index.html", title=title, base_url=base_url, data=new_albums[0])
 
 class GetPlayListHandler(tornado.web.RequestHandler):
     def initialize(self):
@@ -130,7 +132,7 @@ class GetPlayListHandler(tornado.web.RequestHandler):
         res['volume'] = player.getVolume()
         res['status'] = player.status()
         # self.write( tornado.escape.json_encode(res) )
-        self.render("play-list.html", title="homeway|share", data=res)
+        self.render("play-list.html", title=title, data=res)
 
 class GetSongHandler(tornado.web.RequestHandler):
     def initialize(self):
@@ -141,7 +143,7 @@ class GetSongHandler(tornado.web.RequestHandler):
         req = { 'sid':self.get_argument("sid") } 
         res = NetEase.song_detail(  req['sid'] )
         #self.write( tornado.escape.json_encode(res) )
-        self.render("song.html", title="homeway|share", data=res)
+        self.render("song.html", title=title, data=res)
 
 class GetAlbumHandler(tornado.web.RequestHandler):
     def initialize(self):
@@ -152,7 +154,7 @@ class GetAlbumHandler(tornado.web.RequestHandler):
         req = { 'aid':self.get_argument("aid") } 
         res = NetEase.album(  req['aid'] )
         #self.write( tornado.escape.json_encode(res) )
-        self.render("album.html", title="homeway|share", data=res)
+        self.render("album.html", title=title, data=res)
 
 ################################## ajax ############################################
 #搜索信息
