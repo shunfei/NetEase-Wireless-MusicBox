@@ -17,7 +17,14 @@
                         <div class="item-content">
                             <div class="item-inner"> 
                                 <div class="item-title glyphicon glyphicon-bookmark">
-                                    <a href="#" id="start-play" class="button button-fill color-green left">开始播放</a>
+                                    <span class="left play-status">
+                                    {% if data['status'] == 1 %}
+                                        播放中...
+                                    {% else %}
+                                        未播放
+                                    {% end %}
+                                    </span>
+                                    <a href="#" id="start-play" class="button button-fill color-green left margin-left">开始播放</a>
                                     <a href="#" id="pause-play" class="button button-fill color-red left margin-left">暂停播放</a>
                                     <a href="#" id="play-next" class="button button-fill left margin-left">播放下一首</a>
                                 </div>
@@ -30,7 +37,7 @@
                         <div class="item-content">
                             <div class="item-inner"> 
                                 <div class="item-title glyphicon glyphicon-bookmark">
-                                    音量： <input class="set-volume" type="range" min="0" max="1" value="1" step="0.1">
+                                    音量： <input class="set-volume" type="range" min="0" max="1" value="{{ data['volume'] }}" step="0.05">
                                 </div>
                             </div>
                         </div>

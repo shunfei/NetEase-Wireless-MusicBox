@@ -95,6 +95,9 @@ class Play(MusicData):
 		pygame.mixer.init( self.music_option['frequence'], self.music_option['bitsize'], self.music_option['channels'], self.music_option['buffer'])
 		pygame.mixer.music.set_volume(1)
 	
+	def status(self):
+		return self.play_status
+
 	def current_playing_music(self):
 		if not self.currentMusic:
 			m = self.get_play_list_next()
@@ -245,6 +248,12 @@ class Play(MusicData):
 		pygame.mixer.music.set_volume( float(value) )
 		#pygame.mixer.music.set_volume(1)
 		return value
+
+	# 获取音量
+	def getVolume(self):
+		value = pygame.mixer.music.get_volume()
+		return value
+	
 
 if __name__ == "__main__":
 	option = {

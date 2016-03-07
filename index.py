@@ -127,6 +127,8 @@ class GetPlayListHandler(tornado.web.RequestHandler):
         res['current'] = player.current_playing_music()
         # print res['current']
         res['list'] = player.get_play_list(1, 500)
+        res['volume'] = player.getVolume()
+        res['status'] = player.status()
         # self.write( tornado.escape.json_encode(res) )
         self.render("play-list.html", title="homeway|share", data=res)
 
