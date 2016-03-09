@@ -68,7 +68,7 @@ define("db_pwd", default='xiaocao', help="database password", type=str)
 NetEase = api.NetEase()
 login = NetEase.login('username', 'password')
 
-title = "点歌台"
+title = u"点歌台"
 
 class Application(tornado.web.Application):
     '''setting || main || router'''
@@ -240,7 +240,7 @@ class AjaxPauseMusicHandler(tornado.web.RequestHandler):
         res = {'result': True, 'info': ''}
         if player.play_status == play.PLAYING:
             player.need_to_pause = True
-            print u'暂停播放音乐'
+            print u'stop music'
         self.write( tornado.escape.json_encode( res ) )
 
 # 登录网易云

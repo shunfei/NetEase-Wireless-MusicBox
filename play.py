@@ -125,7 +125,7 @@ class Play(MusicData):
 		if self.next_song_count < count:
 			self.next_song_count += 1
 			return
-		print u'请求播放下一首的次数超过', count, u'次，将开始播放下一首'
+		print 'Request to play next song is more than ', count, u', play next song.'
 		self.next_song_count = 0
 		self.need_to_next = True
 
@@ -165,7 +165,7 @@ class Play(MusicData):
 			print("File {} error! {}".format(self.music_info['path'], pygame.get_error()))
 			return
 		pygame.mixer.music.play()
-		print u'开始播放', self.music_info['name']
+		print 'start play ', self.music_info['sid']
 		# 设置当前播放的音乐
 		self.currentMusic = self.get_music_from_play_list(sid)
 		while pygame.mixer.music.get_busy():
@@ -173,7 +173,7 @@ class Play(MusicData):
 			if self.need_to_next:
 				pygame.mixer.music.stop()
 				self.need_to_next = False
-				print u'开始播放下一首'
+				print 'start play next song'
 			if self.need_to_pause:
 				pygame.mixer.music.pause()
 				self.need_to_pause = False
@@ -191,7 +191,7 @@ class Play(MusicData):
 		m = self.get_play_list_next()
 		self.currentMusic = None
 		if m:
-			print 'Play next music from play-list:', m['name']
+			print 'Play next music from play-list:', m['sid']
 			self.play_music(m['sid'])
 		else:
 			self.play_status = STOP
